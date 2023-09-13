@@ -77,7 +77,8 @@ int task5() {
         char famil[20];
         char name[20], facult[20];
         int Nomzach;
-    } stud[3];
+    } 
+    stud[3];
 
     for (i = 0; i < 3; i++)
     {
@@ -101,7 +102,22 @@ int task5() {
         printf("Cтудент %s %s обучаетс€ на факультете %s, номер зачЄтной книжки %d \n", stud[i].famil, stud[i].name,
             stud[i].facult, stud[i].Nomzach);
     }
+    char sname, fname, numb, faq;
+    printf("\n¬ведите фамилюи: ");
+    scanf("%d", &sname);
+    printf("\n¬ведите им€: ");
+    scanf("%d", &fname);
+    printf("\n¬ведите факультет: ");
+    scanf("%d", &faq);
+    printf("\n¬ведите номер зачетной: ");
+    scanf("%d", &numb);
 
+    for (i = 0; i < 3; i++) {
+        if(strcmp(sname, stud[i].famil)==0)
+            printf("Cтудент %s %s обучаетс€ на факультете %s, номер зачЄтной книжки %d \n", stud[i].famil, stud[i].name,
+            stud[i].facult, stud[i].Nomzach);
+    }
+    
 }
 
 int   main(void)

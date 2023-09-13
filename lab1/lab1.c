@@ -6,7 +6,7 @@ int   main(void)
     int temp, n = 10, i = 0;
 
     int a[10] = { 0,1,2,3,4,5,6,7,8,9 };
-
+    while (i < n) printf(" %d", a[i++]);
     /*while (i < n / 2)
     {
         temp = a[i];
@@ -20,7 +20,8 @@ int   main(void)
         if (a[i] < a[min]) min = i;
         if (a[i] > a[max]) max = i;
     }
-    printf("%d - %d = %d\n", a[max], a[min], a[max] - a[min]);
+    printf("%s %d - %s %d = %s %d\n", "max",a[max], "min",a[min], "margin",a[max] - a[min]);
     i = 0;
-    while (i < n) printf(" %d", a[i++]);
+    
+
 }

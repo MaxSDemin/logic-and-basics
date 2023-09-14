@@ -102,20 +102,21 @@ int task5() {
         printf("Cтудент %s %s обучаетс€ на факультете %s, номер зачЄтной книжки %d \n", stud[i].famil, stud[i].name,
             stud[i].facult, stud[i].Nomzach);
     }
-    char sname, fname, numb, faq;
+    char sname[20], fname[20], numb[20], faq[20];
     printf("\n¬ведите фамилюи: ");
-    scanf("%d", &sname);
+    scanf("%s", &sname);
     printf("\n¬ведите им€: ");
-    scanf("%d", &fname);
+    scanf("%s", &fname);
     printf("\n¬ведите факультет: ");
-    scanf("%d", &faq);
+    scanf("%s", &faq);
     printf("\n¬ведите номер зачетной: ");
-    scanf("%d", &numb);
+    scanf("%s", &numb);
 
     for (i = 0; i < 3; i++) {
-        if(strcmp(sname, stud[i].famil)==0)
+        if (strcmp(sname, stud[i].famil) == 0) {
             printf("Cтудент %s %s обучаетс€ на факультете %s, номер зачЄтной книжки %d \n", stud[i].famil, stud[i].name,
-            stud[i].facult, stud[i].Nomzach);
+                stud[i].facult, stud[i].Nomzach);
+        }
     }
     
 }

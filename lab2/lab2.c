@@ -1,58 +1,61 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+void bench(int r1, int c1, int r2, int c2) {
+    int i, j, k;
 
-int slozhnost() {
-	
+    // Dynamic allocation.
+
+    double(*a)[r1][c1] = malloc(sizeof * a);
+    double(*b)[r2][c2] = malloc(sizeof * b);
+    double(*result)[r1][c2] = malloc(sizeof * result);
+
+    // Storing elements of first matrix.
+    for (i = 0; i < r1; ++i)
+    {
+        for (j = 0; j < c1; ++j)
+        {
+            (*a)[i][j] = rand() / RAND_MAX;
+        }
+    }
+
+    // Storing elements of second matrix.
+
+    for (i = 0; i < r2; ++i)
+    {
+        for (j = 0; j < c2; ++j)
+        {
+            (*b)[i][j] = rand() / RAND_MAX;
+        }
+    }
+    // Initializing all elements of result matrix to 0
+    for (i = 0; i < r1; ++i)
+    {
+        for (j = 0; j < c2; ++j)
+        {
+            (*result)[i][j] = 0;
+        }
+    }
+    clock_t begin1 = clock();
+    // Multiplying matrices a and b and
+    // storing result in result matrix
+    for (i = 0; i < r1; ++i)
+        for (j = 0; j < c2; ++j)
+            for (k = 0; k < c1; ++k)
+            {
+                (*result)[i][j] += (*a)[i][k] * (*b)[k][j];
+            }
+
+    clock_t end1 = clock();
+    double time_taken = (double)(end1 - begin1) / CLOCKS_PER_SEC;
+    printf("\n \nfunction took %f seconds to execute \n", time_taken);
+    free(a);
+    free(b);
+    free(result);
 }
 
-
-int main(void)
+int main()
 {
-	setvbuf(stdin, NULL, _IONBF, 0);
-	setvbuf(stdout, NULL, _IONBF, 0);
-
-	clock_t start, end; // объявляем переменные для определения времени выполнения
-
-	int i = 0, j = 0, r;
-	int a[200][200], b[200][200], c[200][200], elem_c;
-
-	srand(time(NULL)); // инициализируем параметры генератора случайных чисел
-	while (i < 200)
-	{
-		while (j < 200)
-		{
-			a[i][j] = rand() % 100 + 1; // заполняем массив случайными числами
-			j++;
-		}
-		i++;
-	}
-	srand(time(NULL)); // инициализируем параметры генератора случайных чисел
-	i = 0; j = 0;
-	while (i < 200)
-	{
-		while (j < 200)
-		{
-			b[i][j] = rand() % 100 + 1; // заполняем массив случайными числами
-			j++;
-		}
-		i++;
-	}
-
-	for (i = 0; i < 200; i++)
-	{
-		for (j = 0; j < 200; j++)
-		{
-			elem_c = 0;
-			for (r = 0; r < 200; r++)
-			{
-				elem_c = elem_c + a[i][r] * b[r][j];
-				c[i][j] = elem_c;
-			}
-		}
-	}
-
-
-	return(0);
+    bench(1000, 1000, 1000, 1000);
+    bench(2000, 2000, 2000, 2000);
 }
-

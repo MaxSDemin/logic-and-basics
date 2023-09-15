@@ -4,31 +4,26 @@
 void bench(int r1, int c1, int r2, int c2) {
     int i, j, k;
 
-    // Dynamic allocation.
-
-    double(*a)[r1][c1] = malloc(sizeof * a);
-    double(*b)[r2][c2] = malloc(sizeof * b);
+    int** a = (int**)malloc(r1 * r2 * sizeof(int*));
+    double(*b) = malloc(c1 * c2 * sizeof(double(b)));
     double(*result)[r1][c2] = malloc(sizeof * result);
 
-    // Storing elements of first matrix.
     for (i = 0; i < r1; ++i)
     {
         for (j = 0; j < c1; ++j)
         {
-            (*a)[i][j] = rand() / RAND_MAX;
+            (*a)[i][j] = rand() % 100 + 1;
         }
     }
-
-    // Storing elements of second matrix.
 
     for (i = 0; i < r2; ++i)
     {
         for (j = 0; j < c2; ++j)
         {
-            (*b)[i][j] = rand() / RAND_MAX;
+            (*b)[i][j] = rand() % 100 + 1;
         }
     }
-    // Initializing all elements of result matrix to 0
+
     for (i = 0; i < r1; ++i)
     {
         for (j = 0; j < c2; ++j)
@@ -37,8 +32,7 @@ void bench(int r1, int c1, int r2, int c2) {
         }
     }
     clock_t begin1 = clock();
-    // Multiplying matrices a and b and
-    // storing result in result matrix
+    
     for (i = 0; i < r1; ++i)
         for (j = 0; j < c2; ++j)
             for (k = 0; k < c1; ++k)

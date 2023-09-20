@@ -192,6 +192,13 @@ void mass_reverse(int* items, int count)
     for (i=count; i > 0; i--) items[i-1] = i;
 }
 
+void mass_polovina(int* items, int count)
+{
+    int i = 0;
+    for (i; i < count / 2; i++) items[i] = i;
+    for (i = count; i >= count / 2; i--) items[i - 1] = i;
+}
+
 void zadanie2() { // представляющем собой возрастающую последовательность чисел
     setlocale(0, "rus");
 
@@ -272,6 +279,45 @@ void zadanie3() {
     printf("\ntime standart: %f s.\n", time_spent);
 }
 
+void zadanie4() {
+    setlocale(0, "rus");
+
+    int n = 0, i;
+
+
+    printf("Size array: ");
+    scanf("%d", &n);
+    printf("\n");
+
+
+    /*int* arr = new int[n];*/
+    int* arr = (int*)malloc(n * sizeof(int));
+
+
+
+    mass_polovina(arr, n);
+    clock_t start = clock();
+    shell(arr, n);
+    clock_t end = clock();
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime shell: %f s.\n", time_spent);
+
+    mass_polovina(arr, n);
+    start = clock();
+    qs(arr, 0, n - 1);
+    end = clock();
+    time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime qs: %f s.\n", time_spent);
+
+    mass_polovina(arr, n);
+    start = clock();
+    qsort(arr, n, sizeof(int), compare);
+    end = clock();
+    time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime standart: %f s.\n", time_spent);
+}
+
+
 int main()
 {
     /*bench(100, 100, 100, 100);
@@ -283,5 +329,6 @@ int main()
     bench(10000, 10000, 10000, 10000);*/
     /*zadanie1();*/
     /*zadanie2();*/
-    zadanie3();
+    /*zadanie3();*/
+    zadanie4();
 }

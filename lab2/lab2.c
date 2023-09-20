@@ -139,7 +139,8 @@ void printB(int* items, int count)
     printf("\n\n");
 }
 
-void cyc() {
+void cyc() { // на случайном наборе значений массива.
+
     setlocale(0, "rus");
 
     int n = 0, i;
@@ -179,6 +180,98 @@ void cyc() {
     printf("\ntime standart: %f s.\n", time_spent);
 }
 
+void mass(int* items, int count)
+{
+    int i = 0;
+    for (i; i < count; i++) items[i] = i;
+}
+
+void massss(int* items, int count)
+{
+    int i = 0;
+    for (i=count; i > 0; i--) items[i-1] = i;
+}
+
+void cic() { // представляющем собой возрастающую последовательность чисел
+    setlocale(0, "rus");
+
+    int n = 0, i;
+
+
+    printf("Size array: ");
+    scanf("%d", &n);
+    printf("\n");
+
+
+    /*int* arr = new int[n];*/
+    int* arr = (int*)malloc(n * sizeof(int));
+
+   
+
+    mass(arr, n);
+    clock_t start = clock();
+    shell(arr, n);
+    clock_t end = clock();
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime shell: %f s.\n", time_spent);
+
+    mass(arr, n);
+    start = clock();
+    qs(arr, 0, n - 1);
+    end = clock();
+    time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime qs: %f s.\n", time_spent);
+
+
+
+    mass(arr, n);
+    start = clock();
+    qsort(arr, n, sizeof(int), compare);
+    end = clock();
+    time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime standart: %f s.\n", time_spent);
+}
+
+void cac() {
+    setlocale(0, "rus");
+
+    int n = 0, i;
+
+
+    printf("Size array: ");
+    scanf("%d", &n);
+    printf("\n");
+
+
+    /*int* arr = new int[n];*/
+    int* arr = (int*)malloc(n * sizeof(int));
+
+
+
+    massss(arr, n);
+    clock_t start = clock();
+    shell(arr, n);
+    clock_t end = clock();
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime shell: %f s.\n", time_spent);
+
+    massss(arr, n);
+    start = clock();
+    qs(arr, 0, n - 1);
+    end = clock();
+    time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime qs: %f s.\n", time_spent);
+
+
+
+    massss(arr, n);
+    start = clock();
+    qsort(arr, n, sizeof(int), compare);
+    end = clock();
+    time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime standart: %f s.\n", time_spent);
+}
+
 int main()
 {
     /*bench(100, 100, 100, 100);
@@ -188,5 +281,7 @@ int main()
     bench(2000, 2000, 2000, 2000);
     bench(4000, 4000, 4000, 4000);
     bench(10000, 10000, 10000, 10000);*/
-    cyc();
+    /*cyc();*/
+    /*cic();*/
+    cac();
 }

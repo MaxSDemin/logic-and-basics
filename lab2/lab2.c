@@ -64,12 +64,27 @@ void bench(int r1, int c1, int r2, int c2) {
         free (a[i]);
     }
     free(a);
+
+    for (int i = 0; i < r1; i++)
+    {
+        free(b[i]);
+    }
     free(b);
+    
+    for (int i = 0; i < r1; i++)
+    {
+        free(result[i]);
+    }
     free(result);
 }
 
 int main()
 {
+    bench(100, 100, 100, 100);
+    bench(200, 200, 200, 200);
+    bench(400, 400, 400, 400);
     bench(1000, 1000, 1000, 1000);
     bench(2000, 2000, 2000, 2000);
+    bench(4000, 4000, 4000, 4000);
+    bench(10000, 10000, 10000, 10000);
 }

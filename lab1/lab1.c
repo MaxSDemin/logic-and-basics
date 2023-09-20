@@ -71,63 +71,72 @@ int task4(){
 int task5() {
     setvbuf(stdin, NULL, _IONBF, 0);
     setvbuf(stdout, NULL, _IONBF, 0);
-    int i;
-    struct student
-    {
+
+    struct student {
         char famil[20];
         char name[20], facult[20];
         int Nomzach;
-    } 
-    stud[3];
+    } stud[3];
 
-    for (i = 0; i < 3; i++)
-    {
-        printf("Введите фамилию студента\n"); scanf("%20s", stud[i].famil);
-    }
-    for (i = 0; i < 3; i++)
-    {
-        printf("Введите имя студента %s\n", stud[i].famil); scanf("%20s", stud[i].name);
-    }
-    for (i = 0; i < 3; i++)
-    {
-        printf("Введите название факультета студента %s %s\n", stud[i].famil, stud[i].name); scanf("%20s", stud[i].facult);
-    }
-    for (i = 0; i < 3; i++)
-    {
-        printf("Введите номер зачётной книжки студента %s %s\n", stud[i].famil, stud[i].name); scanf("%d", &stud[i].Nomzach);
+    // Ввод данных о студентах
+    for (int i = 0; i < 3; i++) {
+        printf("Введите фамилию студента %d:\n", i + 1);
+        scanf("%s", stud[i].famil);
+
+        printf("Введите имя студента %d:\n", i + 1);
+        scanf("%s", stud[i].name);
+
+        printf("Введите название факультета студента %d:\n", i + 1);
+        scanf("%s", stud[i].facult);
+
+        printf("Введите номер зачётной книжки студента %d:\n", i + 1);
+        scanf("%d", &stud[i].Nomzach);
     }
 
-    for (i = 0; i < 3; i++)
-    {
-        printf("Cтудент %s %s обучается на факультете %s, номер зачётной книжки %d \n", stud[i].famil, stud[i].name,
-            stud[i].facult, stud[i].Nomzach);
-    }
-    char sname[20], fname[20], numb[20], faq[20];
-    printf("\nВведите фамилюи: ");
-    scanf("%s", &sname);
-    printf("\nВведите имя: ");
-    scanf("%s", &fname);
-    printf("\nВведите факультет: ");
-    scanf("%s", &faq);
-    printf("\nВведите номер зачетной: ");
-    scanf("%s", &numb);
+    // Поиск структуры с заданными параметрами
+    char searchFamil[20];
+    char searchName[20];
+    int searchNomzach;
 
-    for (i = 0; i < 3; i++) {
-        if (strcmp(sname, stud[i].famil) == 0) {
-            printf("Cтудент %s %s обучается на факультете %s, номер зачётной книжки %d \n", stud[i].famil, stud[i].name,
-                stud[i].facult, stud[i].Nomzach);
+    printf("Введите фамилию для поиска:\n");
+    scanf("%s", searchFamil);
+
+    printf("Введите имя для поиска:\n");
+    scanf("%s", searchName);
+
+    printf("Введите номер зачётной книжки для поиска:\n");
+    scanf("%d", &searchNomzach);
+
+    int found = 0; // Флаг для обозначения, было ли найдено совпадение
+
+    for (int i = 0; i < 3; i++) {
+        if (strcmp(stud[i].famil, searchFamil) == 0 &&
+            strcmp(stud[i].name, searchName) == 0 &&
+            stud[i].Nomzach == searchNomzach)
+        {
+            printf("Cтудент %s %s обучается на факультете %s, номер зачётной книжки %d\n",
+                stud[i].famil, stud[i].name, stud[i].facult, stud[i].Nomzach);
+
+
+            found = 1; // Устанавливаем флаг, что нашли совпадение
+            break;    // Выходим из цикла, так как совпадение найдено
         }
     }
-    
+    if (!found) {
+        printf("Студент с заданными параметрами не найден.\n");
+    }
+
+    return 0;
+
 }
 
 int   main(void)
 {
     setlocale(0, "rus");
-    /*task1();
+    task1();
     task2();
     task3();
-    task4();*/
+    task4();
     task5();
     return 0;
 }

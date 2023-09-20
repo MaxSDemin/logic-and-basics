@@ -1,6 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 void bench(int r1, int c1, int r2, int c2) {
     int i, j, k;
 
@@ -125,6 +127,57 @@ void qs(int* items, int left, int right) //вызов функции: qs(items, 0, count-1);
     if (i < right) qs(items, i, right);
 }
 
+int compare(const void* x1, const void* x2)
+{
+    return(*(int*)x1 - *(int*)x2);
+}
+
+
+void printB(int* items, int count)
+{
+    for (int i = 0; i < count; i++) printf("%d ", items[i]);
+    printf("\n\n");
+}
+
+void cyc() {
+    setlocale(0, "rus");
+
+    int n = 0, i;
+
+
+    printf("Size array: ");
+    scanf("%d", &n);
+    printf("\n");
+
+
+    /*int* arr = new int[n];*/
+    int* arr = (int*)malloc(n * sizeof(int));
+
+    for (i = 0; i < n; i++) arr[i] = rand() % 100 + 1;
+
+
+    clock_t start = clock();
+    shell(arr, n);
+    clock_t end = clock();
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime shell: %f s.\n", time_spent);
+
+    for (i = 0; i < n; i++) arr[i] = rand() % 100 + 1;
+    start = clock();
+    qs(arr, 0, n - 1);
+    end = clock();
+    time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime qs: %f s.\n", time_spent);
+
+
+
+    for (i = 0; i < n; i++) arr[i] = rand() % 100 + 1;
+    start = clock();
+    qsort(arr, n, sizeof(int), compare);
+    end = clock();
+    time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("\ntime standart: %f s.\n", time_spent);
+}
 
 int main()
 {
@@ -135,5 +188,5 @@ int main()
     bench(2000, 2000, 2000, 2000);
     bench(4000, 4000, 4000, 4000);
     bench(10000, 10000, 10000, 10000);*/
-
+    cyc();
 }

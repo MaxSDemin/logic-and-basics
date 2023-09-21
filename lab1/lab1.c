@@ -9,7 +9,7 @@ int task1() {
     /*задание1*/
     printf("/*задание1*/\n");
     int temp, n = 10, i = 0;
-    int a[10] = { 0,1,2,3,4,5,6,7,8,9 };
+    int a[10] = { -9, -8, -7, -6 ,0,1,2,7,8,9 };
 
     int min = 0, max = 0;
     for (int i = 1; i < 10; ++i) {
@@ -27,7 +27,7 @@ int task2(){
     srand(time(NULL));
     int mas[10];
     for (int i = 0; i < 10; i++) {
-        mas[i] = rand() % 101; // диапазон случайных чисед от 0 до 100
+        mas[i] = rand() % 101 - 50; // диапазон случайных чисед от 0 до 100
         printf("%d ", mas[i]);
     }
     return 0;
@@ -56,11 +56,20 @@ int task4(){
     srand(time(NULL));
     int element;
     int matrix[M][N];
+
+    for (int i = 0; i < M; ++i) {
+        for (int j = 0; j < N; ++j) {
+            element = rand() % 101 - 50;
+            matrix[i][j] = element;
+            printf("%d ", element, "\n");
+        }
+        printf("\n");
+    }
+
     for (int i = 0; i < M; ++i) {
         int strok = 0;
         for (int j = 0; j < N; ++j) {
-            element = rand() % 101;
-            matrix[i][j] = element;
+            element = matrix[i][j];
             strok += element;
         }
         printf("%d\n", strok,"\n");
@@ -69,6 +78,8 @@ int task4(){
 }
 
 int task5() {
+    /*задание5*/
+    printf("\n/*задание5*/\n");
     setvbuf(stdin, NULL, _IONBF, 0);
     setvbuf(stdout, NULL, _IONBF, 0);
 
@@ -98,14 +109,25 @@ int task5() {
     char searchName[20];
     int searchNomzach;
 
-    printf("¬ведите фамилию дл€ поиска:\n");
-    scanf("%s", searchFamil);
+    printf("¬ведите 1 дл€ поиска по фамилии, 2 дл€ поиска по имени, 3 дл€ поиска по зачетке");
+    int asd = 0;
+    scanf("%d", &asd);
 
-    printf("¬ведите им€ дл€ поиска:\n");
-    scanf("%s", searchName);
-
-    printf("¬ведите номер зачЄтной книжки дл€ поиска:\n");
-    scanf("%d", &searchNomzach);
+    if (asd == 1) {
+        printf("¬ведите фамилию дл€ поиска:\n");
+        scanf("%s", searchFamil);
+    }
+    else if (asd == 2) {
+        printf("¬ведите им€ дл€ поиска:\n");
+        scanf("%s", searchName);
+    }
+    else if (asd == 3) {
+       printf("¬ведите номер зачЄтной книжки дл€ поиска:\n");
+        scanf("%d", &searchNomzach);
+    }
+    else {
+        printf("поиска не будет");
+    }
 
     int found = 0; // ‘лаг дл€ обозначени€, было ли найдено совпадение
 

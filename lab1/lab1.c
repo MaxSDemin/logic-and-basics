@@ -9,7 +9,7 @@ int task1() {
     /*задание1*/
     printf("/*задание1*/\n");
     int temp, n = 10, i = 0;
-    int a[10] = { 0,1,2,3,4,5,6,7,8,9 };
+    int a[10] = { -9, -8, -7, -6 ,0,1,2,7,8,9 };
 
     int min = 0, max = 0;
     for (int i = 1; i < 10; ++i) {
@@ -27,7 +27,7 @@ int task2(){
     srand(time(NULL));
     int mas[10];
     for (int i = 0; i < 10; i++) {
-        mas[i] = rand() % 101; // диапазон случайных чисед от 0 до 100
+        mas[i] = rand() % 101 - 50; // диапазон случайных чисед от 0 до 100
         printf("%d ", mas[i]);
     }
     return 0;
@@ -56,11 +56,20 @@ int task4(){
     srand(time(NULL));
     int element;
     int matrix[M][N];
+
+    for (int i = 0; i < M; ++i) {
+        for (int j = 0; j < N; ++j) {
+            element = rand() % 101 - 50;
+            matrix[i][j] = element;
+            printf("%d ", element, "\n");
+        }
+        printf("\n");
+    }
+
     for (int i = 0; i < M; ++i) {
         int strok = 0;
         for (int j = 0; j < N; ++j) {
-            element = rand() % 101;
-            matrix[i][j] = element;
+            element = matrix[i][j];
             strok += element;
         }
         printf("%d\n", strok,"\n");
@@ -69,6 +78,8 @@ int task4(){
 }
 
 int task5() {
+    /*задание5*/
+    printf("\n/*задание5*/\n");
     setvbuf(stdin, NULL, _IONBF, 0);
     setvbuf(stdout, NULL, _IONBF, 0);
 
@@ -93,41 +104,57 @@ int task5() {
         scanf("%d", &stud[i].Nomzach);
     }
 
-    // Поиск структуры с заданными параметрами
-    char searchFamil[20];
-    char searchName[20];
-    int searchNomzach;
+    for (int iii = 0; iii < 2; iii++) {
+        // Поиск структуры с заданными параметрами
+        char searchFamil[20] = "";
+        char searchName[20] = "";
+        int searchNomzach = 0;
 
-    printf("Введите фамилию для поиска:\n");
-    scanf("%s", searchFamil);
+        printf("Введите 1 для поиска по фамилии, 2 для поиска по имени, 3 для поиска по зачетке\n");
+        int asd = 0;
+        scanf("%d", &asd);
 
-    printf("Введите имя для поиска:\n");
-    scanf("%s", searchName);
+        if (asd == 1) {
+            printf("Введите фамилию для поиска:\n");
+            scanf("%s", searchFamil);
+        }
+        else if (asd == 2) {
+            printf("Введите имя для поиска:\n");
+            scanf("%s", searchName);
+        }
+        else if (asd == 3) {
+           printf("Введите номер зачётной книжки для поиска:\n");
+            scanf("%d", &searchNomzach);
+        }
+        else {
+            printf("поиска не будет");
+            return;
+        }
 
-    printf("Введите номер зачётной книжки для поиска:\n");
-    scanf("%d", &searchNomzach);
+        int res[4] = { 1, 1, 1, 1 };
 
-    int found = 0; // Флаг для обозначения, было ли найдено совпадение
+        int found = 0; // Флаг для обозначения, было ли найдено совпадение
 
-    for (int i = 0; i < 3; i++) {
-        if (strcmp(stud[i].famil, searchFamil) == 0 &&
-            strcmp(stud[i].name, searchName) == 0 &&
-            stud[i].Nomzach == searchNomzach)
-        {
-            printf("Cтудент %s %s обучается на факультете %s, номер зачётной книжки %d\n",
-                stud[i].famil, stud[i].name, stud[i].facult, stud[i].Nomzach);
+        for (int i = 0; i < 3; i++) {
+            if (((asd == 1 && !strcmp(stud[i].famil, searchFamil)) ||
+                (asd == 2 && !strcmp(stud[i].name, searchName)) ||
+                (asd == 3 && stud[i].Nomzach == searchNomzach))
+                && res[i] == 1)
+            {
+                printf("Cтудент %s %s обучается на факультете %s, номер зачётной книжки %d\n",
+                    stud[i].famil, stud[i].name, stud[i].facult, stud[i].Nomzach);
 
-
-            found = 1; // Устанавливаем флаг, что нашли совпадение
-            break;    // Выходим из цикла, так как совпадение найдено
+                found = 1; // Устанавливаем флаг, что нашли совпадение
+            }
+            else {
+                res[i] = 0;
+            }
+        }
+        if (!found) {
+            printf("Студенты с заданными параметрами не найдены.\n");
         }
     }
-    if (!found) {
-        printf("Студент с заданными параметрами не найден.\n");
-    }
-
     return 0;
-
 }
 
 int   main(void)

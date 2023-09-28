@@ -133,12 +133,6 @@ int compare(const void* x1, const void* x2)
 }
 
 
-void printB(int* items, int count)
-{
-    for (int i = 0; i < count; i++) printf("%d ", items[i]);
-    printf("\n\n");
-}
-
 void zadanie1() { // на случайном наборе значений массива.
 
     setlocale(0, "rus");
@@ -150,13 +144,9 @@ void zadanie1() { // на случайном наборе значений массива.
     scanf("%d", &n);
     printf("\n");
 
-
-    /*int* arr = new int[n];*/
     int* arr = (int*)malloc(n * sizeof(int));
 
     for (i = 0; i < n; i++) arr[i] = rand() % 100 + 1;
-
-
     clock_t start = clock();
     shell(arr, n);
     clock_t end = clock();
@@ -204,16 +194,12 @@ void zadanie2() { // представляющем собой возрастающую последовательность чисел
 
     int n = 0, i;
 
-
     printf("Size array: ");
     scanf("%d", &n);
     printf("\n");
 
-
     /*int* arr = new int[n];*/
     int* arr = (int*)malloc(n * sizeof(int));
-
-   
 
     mass(arr, n);
     clock_t start = clock();
@@ -327,8 +313,8 @@ int main()
     bench(2000, 2000, 2000, 2000);
     bench(4000, 4000, 4000, 4000);
     bench(10000, 10000, 10000, 10000);*/
-    /*zadanie1();*/
-    /*zadanie2();*/
-    /*zadanie3();*/
+    zadanie1();
+    zadanie2();
+    zadanie3();
     zadanie4();
 }

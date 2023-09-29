@@ -132,7 +132,6 @@ int compare(const void* x1, const void* x2)
     return(*(int*)x1 - *(int*)x2);
 }
 
-
 void zadanie1() { // на случайном наборе значений массива.
 
     setlocale(0, "rus");
@@ -142,7 +141,6 @@ void zadanie1() { // на случайном наборе значений массива.
 
     printf("Size array: ");
     scanf("%d", &n);
-    printf("\n");
 
     int* arr = (int*)malloc(n * sizeof(int));
 
@@ -159,8 +157,6 @@ void zadanie1() { // на случайном наборе значений массива.
     end = clock();
     time_spent = (double)(end - start) / CLOCKS_PER_SEC;
     printf("\ntime qs: %f s.\n", time_spent);
-
-
 
     for (i = 0; i < n; i++) arr[i] = rand() % 100 + 1;
     start = clock();
@@ -193,10 +189,10 @@ void zadanie2() { // представляющем собой возрастающую последовательность чисел
     setlocale(0, "rus");
 
     int n = 0, i;
-
+    printf("\n");
     printf("Size array: ");
     scanf("%d", &n);
-    printf("\n");
+    
 
     /*int* arr = new int[n];*/
     int* arr = (int*)malloc(n * sizeof(int));
@@ -214,8 +210,6 @@ void zadanie2() { // представляющем собой возрастающую последовательность чисел
     end = clock();
     time_spent = (double)(end - start) / CLOCKS_PER_SEC;
     printf("\ntime qs: %f s.\n", time_spent);
-
-
 
     mass(arr, n);
     start = clock();
@@ -230,16 +224,12 @@ void zadanie3() {
 
     int n = 0, i;
 
-
+    printf("\n");
     printf("Size array: ");
     scanf("%d", &n);
-    printf("\n");
-
 
     /*int* arr = new int[n];*/
     int* arr = (int*)malloc(n * sizeof(int));
-
-
 
     mass_reverse(arr, n);
     clock_t start = clock();
@@ -255,8 +245,6 @@ void zadanie3() {
     time_spent = (double)(end - start) / CLOCKS_PER_SEC;
     printf("\ntime qs: %f s.\n", time_spent);
 
-
-
     mass_reverse(arr, n);
     start = clock();
     qsort(arr, n, sizeof(int), compare);
@@ -270,10 +258,10 @@ void zadanie4() {
 
     int n = 0, i;
 
-
+    printf("\n");
     printf("Size array: ");
     scanf("%d", &n);
-    printf("\n");
+    
 
 
     /*int* arr = new int[n];*/

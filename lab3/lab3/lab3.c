@@ -286,6 +286,7 @@ void stack() {
 	printf("\n");
 }
 
+
 int main() {
 	setlocale(LC_ALL, "rus");
 	setbuf(stdout, NULL);

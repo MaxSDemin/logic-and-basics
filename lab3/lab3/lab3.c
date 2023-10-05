@@ -288,7 +288,7 @@ void stack() {
 
 
 int main() {
-	setlocale(LC_ALL, "rus");
+	setlocale(0, "rus");
 	setbuf(stdout, NULL);
 
 	qp();

@@ -209,8 +209,14 @@ void qp() {
 			}
 		}
 		else if (act == 3) {
+			if (!q_size) {
+				printf("нечего удалять\n");
+				continue;
+			}
+			free(q[0].inf);
 			q_size--;
-			memmove(&q[0], &q[1], sizeof(q) * q_size);
+			memmove(&q[0], &q[1], sizeof(PQobj) * q_size);
+			q = realloc(q, sizeof(PQobj) * q_size);
 		}
 		else {
 			printf("нет такого действия\n");
@@ -286,9 +292,10 @@ void stack() {
 	printf("\n");
 }
 
-
 int main() {
-	setlocale(0, "rus");
+	setlocale(LC_ALL, "Russian");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	setbuf(stdout, NULL);
 
 	qp();

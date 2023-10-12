@@ -1,17 +1,22 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <string.h>
+#include <locale.h>
+#include<windows.h>
 
+typedef struct Node {
+	struct Node* left;
+	struct Node* right;
+	int data;
+} Node;
 
 struct Node* root;
-struct Node* CreateTree(struct Node* root, struct Node* r, int data)
-{
-	if (r == NULL)
-	{
-		r = (struct Node*)malloc(sizeof(struct Node));
-		if (r == NULL)
-		{
+
+struct Node* CreateTree(Node* rooot, Node* r, int data) {
+	if (r == NULL) {
+		r = (struct Node*)malloc(sizeof(Node));
+		if (r == NULL) {
 			printf("Ошибка выделения памяти");
 			exit(0);
 		}
@@ -19,33 +24,30 @@ struct Node* CreateTree(struct Node* root, struct Node* r, int data)
 		r->left = NULL;
 		r->right = NULL;
 		r->data = data;
-		if (root == NULL) return r;
+		if (rooot == NULL)
+			return r;
 
-		if (data > root->data)	root->left = r;
-		else root->right = r;
+		if (data > rooot->data)
+			rooot->left = r;
+		else
+			rooot->right = r;
 		return r;
 	}
 
 	if (data > r->data)
 		CreateTree(r, r->left, data);
-
 	else
 		CreateTree(r, r->right, data);
 
-	return root;
+	return rooot;
 }
 
-void print_tree(struct Node* r, int l)
-{
-
+void print_tree(Node* r, int l) {
 	if (r == NULL)
-	{
 		return;
-	}
 
 	print_tree(r->right, l + 1);
-	for (int i = 0; i < l; i++)
-	{
+	for (int i = 0; i < l; i++) {
 		printf(" ");
 	}
 
@@ -53,19 +55,71 @@ void print_tree(struct Node* r, int l)
 	print_tree(r->left, l + 1);
 }
 
-int main()
-{
-	setlocale(LC_ALL, "");
+/*
+ *      44
+ *     4 4
+ *    4  4
+ *   4   4
+ *  444444444
+ *       4
+ *       4
+ *
+ */
+
+void search_tree(Node* r, int l, int query) {
+	if (r == NULL)
+		return;
+
+	search_tree(r->right, l + 1, query);
+	for (int i = 0; i < l; i++) {
+		printf(" ");
+	}
+
+	if (r->data == query)
+		printf("%d <----\n", r->data);
+	else
+		printf("%d\n", r->data);
+	search_tree(r->left, l + 1, query);
+}
+
+int _count_tree(Node* r, int l, int query, int count) {
+	if (r == NULL)
+		return count;
+
+	count = _count_tree(r->right, l + 1, query, count);
+	for (int i = 0; i < l; i++) {
+		printf(" ");
+	}
+
+	if (r->data == query) {
+		count++;
+		printf("%d <---- (%d)\n", r->data, count);
+	}
+	else {
+		printf("%d\n", r->data);
+	}
+	count = _count_tree(r->left, l + 1, query, count);
+	return count;
+}
+
+int count_tree(Node* r, int l, int query) {
+	return _count_tree(r, l, query, 0);
+}
+
+int main() {
+	setlocale(LC_ALL, "Russian");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	setbuf(stdout, NULL);
+
 	int D, start = 1;
 
 	root = NULL;
 	printf("-1 - окончание построения дерева\n");
-	while (start)
-	{
+	while (start) {
 		printf("Введите число: ");
 		scanf_s("%d", &D);
-		if (D == -1)
-		{
+		if (D == -1) {
 			printf("Построение дерева окончено\n\n");
 			start = 0;
 		}
@@ -73,9 +127,36 @@ int main()
 			root = CreateTree(root, root, D);
 
 	}
-
 	print_tree(root, 0);
 
+	printf("Поиск числа:\n");
 	scanf_s("%d", &D);
+	search_tree(root, 0, D);
+
+	printf("Поиск количества вхождений числа:\n");
+	count_tree(root, 0, D);
+
+	root = NULL;
+	start = 1;
+	printf("-1 - окончание построения дерева\n");
+	while (start) {
+		printf("Введите число: ");
+		scanf_s("%d", &D);
+		if (count_tree(root, 0, D)) {
+			printf("Число уже есть\n\n");
+			continue;
+		}if (D == -1) {
+			printf("Построение дерева окончено\n\n");
+			start = 0;
+		}
+		else {
+			root = CreateTree(root, root, D);
+		}
+
+	}
+	print_tree(root, 0);
+
+
 	return 0;
 }
+

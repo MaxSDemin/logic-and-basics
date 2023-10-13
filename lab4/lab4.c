@@ -56,17 +56,6 @@ void print_tree(Node* r, int l) {
 	print_tree(r->left, l + 1);
 }
 
-/*
- *      44
- *     4 4
- *    4  4
- *   4   4
- *  444444444
- *       4
- *       4
- *
- */
-
 void search_tree(Node* r, int l, int query) {
 	if (r == NULL)
 		return;

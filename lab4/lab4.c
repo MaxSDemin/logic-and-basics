@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#include<windows.h>
+#include <windows.h>
+#include <stdbool.h>
 
 typedef struct Node {
 	
@@ -14,7 +15,8 @@ typedef struct Node {
 
 struct Node* root;
 
-struct Node* CreateTree(Node* rooot, Node* r, int data) {
+//`
+struct Node* CreateTree(Node* rooot, Node* r, int data, bool left) {
 	if (r == NULL) {
 		r = (struct Node*)malloc(sizeof(Node));
 		if (r == NULL) {
@@ -28,17 +30,17 @@ struct Node* CreateTree(Node* rooot, Node* r, int data) {
 		if (rooot == NULL)
 			return r;
 
-		if (data > rooot->data)
+		if (left)
 			rooot->left = r;
 		else
 			rooot->right = r;
 		return r;
 	}
 
-	if (data > r->data)
-		CreateTree(r, r->left, data);
+	if (left)
+		CreateTree(r, r->right, data, left);
 	else
-		CreateTree(r, r->right, data);
+		CreateTree(r, r->right, data, left);
 
 	return rooot;
 }
@@ -104,7 +106,7 @@ int main() {
 
 	int D, start = 1;
 
-	root = NULL;
+	root = NULL;/*
 	printf("-1 - окончание построения дерева\n");
 	while (start) {
 		printf("Введите число: ");
@@ -114,10 +116,10 @@ int main() {
 			start = 0;
 		}
 		else
-			root = CreateTree(root, root, D);
+			root = CreateTree(root, root, D, false);
 
 	}
-	print_tree(root, 0);
+	print_tree(root, 0);*/
 
 	printf("Поиск числа:\n");
 	scanf_s("%d", &D);
@@ -130,6 +132,12 @@ int main() {
 	start = 1;
 	printf("-1 - окончание построения дерева\n");
 	while (start) {
+		bool left = false;
+		printf("ВВедите 1 если слева, не 1 если справа: ");
+		scanf_s("%d", &D);
+		if (D == 1)
+			left = true;
+
 		printf("Введите число: ");
 		scanf_s("%d", &D);
 		if (count_tree(root, 0, D)) {
@@ -140,7 +148,7 @@ int main() {
 			start = 0;
 		}
 		else {
-			root = CreateTree(root, root, D);
+			root = CreateTree(root, root, D, left);
 		}
 
 	}

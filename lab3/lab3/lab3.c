@@ -30,6 +30,7 @@ struct node* get_struct(void) {
 
 	printf("Введите название объекта: \n");   // вводим данные
 	scanf("%s", s);
+	fseek(stdin, 0, SEEK_END);
 	if (*s == 0) {
 		printf("Запись не была произведена\n");
 		return NULL;
@@ -175,15 +176,19 @@ void qp() {
 
 		int act = 0;
 		scanf("%d", &act);
+		fseek(stdin, 0, SEEK_END);
 
 		if (act == 1) {
 			q_size++;
 			q = realloc(q, sizeof(PQobj) * q_size);
 
 			node* inf = get_struct();
-			int prior = 0;
-			printf("Введите приоритет:\n");
-			scanf("%d", &prior);
+			int prior = INT_MAX;
+			while (prior == INT_MAX) {
+				printf("Введите приоритет (в виде целого числа):\n");
+				scanf("%d", &prior);
+				fseek(stdin, 0, SEEK_END);
+			}
 
 			q[q_size - 1].inf = inf;
 			q[q_size - 1].prior = prior;
@@ -238,6 +243,7 @@ void q() {
 
 		int act = 0;
 		scanf("%d", &act);
+		fseek(stdin, 0, SEEK_END);
 
 		if (act == 1) {
 			spstore();
@@ -269,6 +275,7 @@ void stack() {
 
 		int act = 0;
 		scanf("%d", &act);
+		fseek(stdin, 0, SEEK_END);
 
 		if (act == 1) {
 			spstore2();

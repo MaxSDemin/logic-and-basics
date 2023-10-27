@@ -7,6 +7,8 @@
 #include <windows.h>
 #include <stdbool.h>
 
+#define NO_PRINT
+
 typedef struct node {
 	int x;
 	struct node* next; // ссылка на следующий элемент
@@ -61,14 +63,25 @@ int main() {
 	//			{1, 0, 0, 0, 0, 0},
 	//	};
 
+	#ifndef NO_PRINT
 	printMatrix(matrix, size);
-	printf("----\n");
+	#endif
 
 	//	2
 	int* num = (int*)calloc(size, sizeof(int)); // 1.1
+	int i = 1;
+	#ifndef NO_PRINT
+		printf("enter start vertex number:\n");
+		scanf("%d", &i);
+		printf("----\n");
+	#endif
+	i--;
+
+
+	setvbuf(stdout, NULL, _IOFBF, 16384);
+	clock_t time_start = clock();
 	while (true) { // 1.2.
 		bool done = true;
-		int i = 0;
 		for (; i < size; i++) {
 			if (num[i] == 0) {
 				done = false;
@@ -92,7 +105,9 @@ int main() {
 			if (q_first == NULL)
 				q_last = NULL;
 
+			#ifndef NO_PRINT
 			printf("%d\n", f->x + 1); // 2.7.
+			#endif
 			free(f);
 			for (int i2 = 1; i2 < size; i2++) { // 2.8.
 				if (matrix[i][i2] == 1 && num[i2] == false) { // 2.9.
@@ -114,6 +129,14 @@ int main() {
 		}
 
 	}
+	clock_t time_end = clock();
+
+	fflush(stdout);
+	setbuf(stdout, NULL);
+
+	double diff = time_end - time_start;
+	printf("time elapsed: %fms", diff);
+
 
 	for (int i = 0; i < size; i++)
 		free(matrix[i]);

@@ -7,6 +7,65 @@
 
 #define MAX_SIZE 100
 
+struct node
+{
+    int vertex;
+    struct node* next;
+};
+struct node* createNode(int v)
+{
+    struct node* newNode = (node*)malloc(sizeof(struct node));
+    newNode->vertex = v;
+    newNode->next = NULL;
+    return newNode;
+}
+
+struct Graph
+{
+    int numVertices;
+    struct node** adjLists;
+};
+struct Graph* createGraph(int vertices)
+{
+    struct Graph* graph = (Graph*)malloc(sizeof(struct Graph));
+    graph->numVertices = vertices;
+
+    graph->adjLists = (node**)malloc(vertices * sizeof(struct node*));
+
+    int i;
+    for (i = 0; i < vertices; i++)
+        graph->adjLists[i] = NULL;
+
+    return graph;
+}
+
+void addEdge(struct Graph* graph, int src, int dest)
+{
+    struct node* newNode = createNode(dest);
+    newNode->next = graph->adjLists[src];
+    graph->adjLists[src] = newNode;
+
+    newNode = createNode(src);
+    newNode->next = graph->adjLists[dest];
+    graph->adjLists[dest] = newNode;
+}
+
+void printGraph(struct Graph* graph)
+{
+    int v;
+    printf("\n");
+    for (v = 0; v < graph->numVertices; v++)
+    {
+        struct node* temp = graph->adjLists[v];
+        printf("\nvertex: %d\n ", v+1);
+        while (temp)
+        {
+            printf("%d ", temp->vertex+1);
+            temp = temp->next;
+        }
+    }
+}
+
 void BFSD(int **G, int size_G, int v, int DIST[MAX_SIZE]) {
     bool visited[MAX_SIZE] = { false };
     visited[v] = true;
@@ -38,7 +97,7 @@ int main() {
     srand(time(NULL)); // Инициализация генератора случайных чисел
 
     int** matrix = (int**)calloc(size, sizeof(int*));
-    for (int i = 0; i < size; i++) {    
+    for (int i = 0; i < size; i++) {
         matrix[i] = (int*)calloc(size, sizeof(int));
     }
 
@@ -72,5 +131,27 @@ int main() {
         printf("%d ", DIST[i]);
     }
 
-    return 0;
+    //Задание 1.3
+    struct Graph* graph = createGraph(size);
+    srand(time(NULL));
+    int *vertex = (int*)calloc(size, sizeof(int));
+    bool edge;
+
+    for (int i = 0; i < size; i++)
+    {
+        vertex[i] = i;
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = i+1; j < size; j++)
+        {
+            edge = rand() % 2;
+            if (vertex[j] != i and edge == true)
+            {
+                addEdge(graph, i, j);
+            }
+        }
+    }
+    printGraph(graph);
 }

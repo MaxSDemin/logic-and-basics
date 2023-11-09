@@ -67,7 +67,7 @@ void printGraph(struct Graph *graph) {
 	}
 }
 
-void BFSD(int **G, int size_G, int v, int DIST[MAX_SIZE]) {
+void BFSD(int **G, int size_G, int v, int **DIST) {
 	bool visited[MAX_SIZE] = {false};
 	visited[v] = true;
 	DIST[v] = 0;
@@ -168,7 +168,11 @@ int main() {
 	printf("Enter the source vertex: ");
 	scanf("%d", &v);
 
-	int DIST[MAX_SIZE];
+	int** DIST = (int**)calloc(size + 1, sizeof(int*));
+	for (int i = 0; i < size; i++) {
+		DIST[i] = (int*)calloc(size, sizeof(int));
+	}
+
 	for (size_t i = 0; i < MAX_SIZE; i++) {
 		DIST[i] = -1;
 	}

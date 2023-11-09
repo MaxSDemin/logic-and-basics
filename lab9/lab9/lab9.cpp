@@ -7,7 +7,7 @@
 #include <windows.h>
 #include <queue>
 
-#define MAX_SIZE 1000
+#define MAX_SIZE 10000
 #define NO_PRINT
 
 struct node {
@@ -54,6 +54,7 @@ void printGraph(struct Graph *graph) {
 	#ifdef NO_PRINT
 	return;
 	#endif
+
 	int v;
 	printf("\n");
 	for (v = 0; v < graph->numVertices; v++) {
@@ -89,18 +90,20 @@ void BFSD(int **G, int size_G, int v, int DIST[MAX_SIZE]) {
 			}
 		}
 	}
+
 }
 
 
-int DFS(int **vertex, int first, int **matrix, int count, int clearVertex) {
+int DFS(int **vertex, int first, int **matrix, int count, int clearVertex, int dst) {
 	vertex[1][first] = false;
 	#ifndef NO_PRINT
-	printf("vertex: %d\n", vertex[0][first]);
+	printf("vertex: %d", vertex[0][first]);
+	printf(" dst: %d\n", dst);
 	#endif
 
 	for (int i = 0; i < count; i++)
 		if (matrix[first][i] == 1 and vertex[1][i] == true)
-			DFS(vertex, i, matrix, count, clearVertex);
+			DFS(vertex, i, matrix, count, clearVertex, ++dst);
 
 	for (int i = 0; i < count; i++)
 		if (vertex[1][i] == 0)
@@ -125,7 +128,7 @@ void POG(int **matrix, int count, int i) {
 		while (NUM[1][i] == false) {
 			i++;
 		}
-		clearVertex = DFS(NUM, i, matrix, count, clearVertex);
+		clearVertex = DFS(NUM, i, matrix, count, clearVertex, 0);
 	}
 }
 
@@ -193,13 +196,17 @@ int main() {
 
 	for (int i = 0; i < size; i++) {
 		for (int j = i + 1; j < size; j++) {
-			edge = rand() % 2;
-			if (vertex[j] != i and edge == true) {
+			edge = matrix[i][j];
+			if (edge == true) {
 				addEdge(graph, i, j);
 			}
 		}
 	}
 	printGraph(graph);
+	printf("\ndistances:\n");
+	for (int i = 0; i < size; i++) {
+		printf("%d ", DIST[i]);
+	}
 
 	// 2
 	printf("\n\n--TASK 2--\n\n");
@@ -208,8 +215,8 @@ int main() {
 	clock_t time_end2 = clock();
 	double diff2 = time_end2 - time_start2;
 
-	printf("\ntime elapsed: %fms\n", diff);
-	printf("\ntime elapsed2 : %fms\n", diff2);
+	printf("\ntime elapsed : %fms\n", diff);
+	printf("time elapsed2: %fms\n", diff2);
 
 
 }

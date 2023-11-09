@@ -8,7 +8,7 @@
 #include <queue>
 
 #define MAX_SIZE 10000
-#define NO_PRINT
+//#define NO_PRINT
 
 struct node {
 	int vertex;

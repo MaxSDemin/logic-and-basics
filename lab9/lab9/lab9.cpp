@@ -76,6 +76,12 @@ void BFSD(int** G, int size_G, int v, int* DIST) {
 	int front = 0, rear = 0;
 	queue[rear++] = v;
 
+	int** NUM = (int**)malloc(size_G * sizeof(int*));
+	for (int i = 0; i < size_G; i++) {
+		NUM[i] = (int*)calloc(size_G, sizeof(int));
+	}
+
+
 	while (front != rear) {
 		int current_vertex = queue[front++];
 #ifndef NO_PRINT
@@ -86,12 +92,42 @@ void BFSD(int** G, int size_G, int v, int* DIST) {
 			if (G[current_vertex][i] == 1 && !visited[i]) {
 				queue[rear++] = i;
 				visited[i] = true;
+				#ifndef NO_PRINT
+				
+				int iii = 0, iiii = 0;
+				while (NUM[current_vertex][iii] != 0) {
+					NUM[i][iii] = NUM[current_vertex][iii];
+					iii++;
+				}
+
+				iiii = 0;
+				while (NUM[i][iii] != 0)
+					iii++;
+				NUM[i][iii] = current_vertex + 1;
+
 				printf("%d->%d ", current_vertex + 1, i + 1);
+				#endif
 				DIST[i] = DIST[current_vertex] + 1;
 			}
 		}
 		printf("\n");
 	}
+
+	printf("\n");
+	for (size_t i = 0; i < size_G; i++)
+	{
+		printf("%d: ", i + 1);
+		int i2 = 0;
+		while (NUM[i][i2] != 0)
+		{
+			printf("%d ", NUM[i][i2]);
+			i2++;
+		}
+		printf("\n");
+	}
+	for (int i = 0; i < size_G; i++)
+		free(NUM[i]);
+	free(NUM);
 
 }
 

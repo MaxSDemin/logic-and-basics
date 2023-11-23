@@ -172,15 +172,28 @@ void POG(int** matrix, int count, int i) {
 	}
 }
 
-int main() {
+int main(int argc, char** argv) {
+
 	setlocale(LC_ALL, "Russian");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 	setbuf(stdout, NULL);
 
-	int size, v = 0;
-	printf("Enter a count of headers: ");
-	scanf(" %d", &size);
+
+	if ((argc == 2 && argv[1][0] == '-' && argv[1][1] == 'h') || argc < 3 ||
+		argv[1][0] < '1' || argv[1][0] > '9' || argv[2][0] < '1' || argv[2][0] > '9' ) {
+		printf("\nusage: lab10.exe [size] [vertex_count]\n");
+		printf(" 1 < size < 10;   1 < vertex_count < 10\n\n");
+
+		return 0;
+	}
+	int size = 1, v = 1;
+	if (argc >= 3) {
+		size = (int)argv[1][0] - 48;
+		v = (int)argv[2][0] - 48;
+}
+//	printf("Enter a count of headers: ");
+//	scanf(" %d", &size);
 
 	srand(time(NULL)); //
 
@@ -205,8 +218,8 @@ int main() {
 	}
 #endif
 
-	printf("Enter the source vertex: ");
-	scanf("%d", &v);
+//	printf("Enter the source vertex: ");
+//	scanf("%d", &v);
 	v--;
 	if (v < 0)
 		v = 0;

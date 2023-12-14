@@ -303,6 +303,7 @@ int main() {
 
 	while (ready) {
 
+		fseek(stdin, 0, SEEK_END);
 		/*printGraph(graph1);
 		 printf("\n");
 		 printGraph(graph2);*/

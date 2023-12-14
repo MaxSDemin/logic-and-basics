@@ -8,11 +8,11 @@
 
 typedef struct node {
 	int vertex;
-	struct node *next;
+	struct node* next;
 } node;
 
 struct node* createNode(int v) {
-	struct node *newNode = (node*) malloc(sizeof(struct node));
+	struct node* newNode = (node*)malloc(sizeof(struct node));
 	newNode->vertex = v;
 	newNode->next = NULL;
 	return newNode;
@@ -20,14 +20,14 @@ struct node* createNode(int v) {
 
 typedef struct Graph {
 	int numVertices;
-	struct node **adjLists;
+	struct node** adjLists;
 } Graph;
 
 struct Graph* createGraph(int vertices) {
-	struct Graph *graph = (Graph*) malloc(sizeof(struct Graph));
+	struct Graph* graph = (Graph*)malloc(sizeof(struct Graph));
 	graph->numVertices = vertices;
 
-	graph->adjLists = (node**) malloc(vertices * sizeof(struct node*));
+	graph->adjLists = (node**)malloc(vertices * sizeof(struct node*));
 
 	int i;
 	for (i = 0; i < vertices; i++)
@@ -36,8 +36,8 @@ struct Graph* createGraph(int vertices) {
 	return graph;
 }
 
-void addEdge(struct Graph *graph, int src, int dest) {
-	struct node *newNode = createNode(dest);
+void addEdge(struct Graph* graph, int src, int dest) {
+	struct node* newNode = createNode(dest);
 	newNode->next = graph->adjLists[src];
 	graph->adjLists[src] = newNode;
 
@@ -46,14 +46,14 @@ void addEdge(struct Graph *graph, int src, int dest) {
 	graph->adjLists[dest] = newNode;
 }
 
-void printGraph(struct Graph *graph) {
+void printGraph(struct Graph* graph) {
 #ifdef NO_PRINT
-    return;
+	return;
 #endif
 
 	int v;
 	for (v = 0; v < graph->numVertices; v++) {
-		struct node *temp = graph->adjLists[v];
+		struct node* temp = graph->adjLists[v];
 		printf("\nvertex: %d\n ", v + 1);
 		while (temp) {
 			printf("%d ", temp->vertex + 1);
@@ -62,10 +62,10 @@ void printGraph(struct Graph *graph) {
 	}
 }
 
-int** identity(int **matrix, int vertexA, int vertexB, int count) {
-	int **matrixNew = (int**) calloc(count - 1, sizeof(int*));
+int** identity(int** matrix, int vertexA, int vertexB, int count) {
+	int** matrixNew = (int**)calloc(count - 1, sizeof(int*));
 	for (int i = 0; i < count - 1; i++) {
-		matrixNew[i] = (int*) calloc(count - 1, sizeof(int));
+		matrixNew[i] = (int*)calloc(count - 1, sizeof(int));
 	}
 	int row = 0;
 	int col = 0;
@@ -88,12 +88,13 @@ int** identity(int **matrix, int vertexA, int vertexB, int count) {
 	for (int i = 0; i < count; i++) {
 		if (i != vertexA && i != vertexB) {
 			matrixNew[row][count - 2] = matrix[vertexA][i]
-					|| matrix[vertexB][i];
+				|| matrix[vertexB][i];
 			matrixNew[count - 2][col] = matrix[i][vertexA]
-					|| matrix[i][vertexB];
+				|| matrix[i][vertexB];
 			row++;
 			col++;
-		} else {
+		}
+		else {
 			matrixNew[count - 2][count - 2] = matrix[vertexA][vertexB];
 		}
 	}
@@ -111,7 +112,7 @@ int** identity(int **matrix, int vertexA, int vertexB, int count) {
 	return matrixNew;
 }
 
-int** tightening(int **matrix, int vertexA, int vertexB, int count) {
+int** tightening(int** matrix, int vertexA, int vertexB, int count) {
 	matrix[vertexA][vertexB] = 0;
 	matrix[vertexB][vertexA] = 0;
 	matrix = identity(matrix, vertexA, vertexB, count);
@@ -119,11 +120,11 @@ int** tightening(int **matrix, int vertexA, int vertexB, int count) {
 	return matrix;
 }
 
-int** splitting(int **matrix, int vertex, int count) {
+int** splitting(int** matrix, int vertex, int count) {
 	count++;
-	int **matrixNew = (int**) calloc(count, sizeof(int*));
+	int** matrixNew = (int**)calloc(count, sizeof(int*));
 	for (int i = 0; i < count; i++)
-		matrixNew[i] = (int*) calloc(count, sizeof(int));
+		matrixNew[i] = (int*)calloc(count, sizeof(int));
 
 	// скопировать верхний левый угол до расщепленной части
 	for (int y = 0; y < vertex; y++)
@@ -135,22 +136,22 @@ int** splitting(int **matrix, int vertex, int count) {
 		for (int x = vertex + 1; x < count - 1; x++) // пропуская эту часть + старая матрица меньше
 			matrixNew[y][x - 1] = matrix[y][x]; // смещение чтоб не было пробела
 
-		// скопировать нижний левый угол после расщепленной части
+	// скопировать нижний левый угол после расщепленной части
 	for (int y = vertex + 1; y < count - 1; y++) // пропуская эту часть + старая матрица меньше
 		for (int x = 0; x < vertex; x++)
 			matrixNew[y - 1][x] = matrix[y][x]; // смещение чтоб не было пробела
 
-		// скопировать нижний правый угол после расщепленной части
+	// скопировать нижний правый угол после расщепленной части
 	for (int y = vertex + 1; y < count - 1; y++) // пропуская эту часть + старая матрица меньше
 		for (int x = vertex + 1; x < count - 1; x++) // пропуская эту часть + старая матрица меньше
 			matrixNew[y - 1][x - 1] = matrix[y][x]; // смещение чтоб не было пробела
 
-		// скопировать нижний правый угол после расщепленной части
+	// скопировать нижний правый угол после расщепленной части
 	for (int y = vertex + 1; y < count - 1; y++) // пропуская эту часть + старая матрица меньше
 		for (int x = vertex + 1; x < count - 1; x++) // пропуская эту часть + старая матрица меньше
 			matrixNew[y - 1][x - 1] = matrix[y][x]; // смещение чтоб не было пробела
 
-		// скопировать вертикальную часть в последние два столбца
+	// скопировать вертикальную часть в последние два столбца
 	for (int y = 0; y < count - 1; y++) {
 		matrixNew[y][count - 1] = matrix[y][vertex];
 		matrixNew[y][count - 2] = matrix[y][vertex];
@@ -168,16 +169,16 @@ int** splitting(int **matrix, int vertex, int count) {
 	return matrixNew;
 }
 
-int** unione(int **matrix1, int **matrix2, int size1, int size2, int *sizeNew) {
+int** unione(int** matrix1, int** matrix2, int size1, int size2, int* sizeNew) {
 	int maxx = size1 > size2 ? size1 : size2;
 	int minn = maxx == size2 ? size1 : size2;
 
 	*sizeNew = maxx;
 	bool m1smol = minn == size1;
 
-	int **matrixNew = (int**) calloc(maxx, sizeof(int*));
+	int** matrixNew = (int**)calloc(maxx, sizeof(int*));
 	for (int i = 0; i < maxx; i++)
-		matrixNew[i] = (int*) calloc(maxx, sizeof(int));
+		matrixNew[i] = (int*)calloc(maxx, sizeof(int));
 
 	for (int i = 0; i < maxx; i++)
 		for (int i2 = 0; i2 < maxx; i2++)
@@ -189,16 +190,16 @@ int** unione(int **matrix1, int **matrix2, int size1, int size2, int *sizeNew) {
 	return matrixNew;
 }
 
-int** intersection(int **matrix1, int **matrix2, int size1, int size2,
-		int *sizeNew) {
+int** intersection(int** matrix1, int** matrix2, int size1, int size2,
+	int* sizeNew) {
 	int maxx = size1 > size2 ? size1 : size2;
 	int minn = maxx == size2 ? size1 : size2;
 
 	*sizeNew = maxx;
 
-	int **matrixNew = (int**) calloc(maxx, sizeof(int*));
+	int** matrixNew = (int**)calloc(maxx, sizeof(int*));
 	for (int i = 0; i < maxx; i++)
-		matrixNew[i] = (int*) calloc(maxx, sizeof(int));
+		matrixNew[i] = (int*)calloc(maxx, sizeof(int));
 
 	for (int i = 0; i < minn; i++)
 		for (int i2 = 0; i2 < minn; i2++)
@@ -223,13 +224,13 @@ int main() {
 
 	srand(time(NULL));
 
-	int **matrix1 = (int**) malloc(count1 * sizeof(int*));
+	int** matrix1 = (int**)malloc(count1 * sizeof(int*));
 	for (int i = 0; i < count1; i++) {
-		matrix1[i] = (int*) malloc(count1 * sizeof(int));
+		matrix1[i] = (int*)malloc(count1 * sizeof(int));
 	}
-	int **matrix2 = (int**) malloc(count2 * sizeof(int*));
+	int** matrix2 = (int**)malloc(count2 * sizeof(int*));
 	for (int i = 0; i < count2; i++) {
-		matrix2[i] = (int*) malloc(count2 * sizeof(int));
+		matrix2[i] = (int*)malloc(count2 * sizeof(int));
 	}
 
 	for (int i = 0; i < count1; i++) {
@@ -258,9 +259,9 @@ int main() {
 		}
 	}
 
-	struct Graph *graph1 = createGraph(count1);
+	struct Graph* graph1 = createGraph(count1);
 	srand(time(NULL));
-	int *vertex = (int*) calloc(count1, sizeof(int));
+	int* vertex = (int*)calloc(count1, sizeof(int));
 	bool edge;
 
 	for (int i = 0; i < count1; i++) {
@@ -276,9 +277,9 @@ int main() {
 		}
 	}
 
-	struct Graph *graph2 = createGraph(count2);
+	struct Graph* graph2 = createGraph(count2);
 	srand(time(NULL));
-	vertex = (int*) calloc(count2, sizeof(int));
+	vertex = (int*)calloc(count2, sizeof(int));
 
 	for (int i = 0; i < count2; i++) {
 		vertex[i] = i;
@@ -323,12 +324,12 @@ int main() {
 
 		printf("\nVyberete kakuyu operaciyu nuzhno sdelat':\n");
 		printf(
-				"0. Propustit'/Prodolzhit' dal'she.\n1. Otozhdestvlenie vershin.\n2. Styagivanie rebra.\n3. Rasshcheplenie vershin.\n4. Objedineniya grafof.\n5. Peresecheniya grafof.\n\n");
+			"0. Propustit'/Prodolzhit' dal'she.\n1. Otozhdestvlenie vershin.\n2. Styagivanie rebra.\n3. Rasshcheplenie vershin.\n4. Objedineniya grafof.\n5. Peresecheniya grafof.\n\n");
 		printf("\nDlya vybora vvedite cifru ot 1 do 5 sootvetstvenno\n");
 
 		int input;
 		scanf("%d", &input);
-		int **new_ = NULL;
+		int** new_ = NULL;
 		switch (input) {
 		case 0:
 			ready = false;
@@ -338,7 +339,7 @@ int main() {
 			printf("\nVvedite nuzhnye vershiny [1-%d] [1-%d]: ", maxx, maxx);
 			scanf("%d %d", &vertexA, &vertexB);
 			if (vertexA < 1 || vertexB < 1 || vertexA > maxx
-					|| vertexB > maxx) {
+				|| vertexB > maxx) {
 				printf("Vvedite eshche raz");
 				break;
 			}
@@ -359,11 +360,11 @@ int main() {
 		case 2:
 			maxx = count1 > count2 ? count1 : count2;
 			printf(
-					"\nVvedite vershiny mezhdu kotorymi styanut' rebro [1-%d] [1-%d]: ",
-					maxx, maxx);
+				"\nVvedite vershiny mezhdu kotorymi styanut' rebro [1-%d] [1-%d]: ",
+				maxx, maxx);
 			scanf("%d %d", &vertexA, &vertexB);
 			if (vertexA < 1 || vertexB < 1 || vertexA > maxx
-					|| vertexB > maxx) {
+				|| vertexB > maxx) {
 				printf("Vvedite eshche raz");
 				break;
 			}
@@ -383,10 +384,10 @@ int main() {
 			break;
 		case 3:
 			printf("\nVvedite vershine kotoruyu hotite rasshchepit' [1-%d]: ",
-					count1 < count2 ? count1 : count2);
+				count1 < count2 ? count1 : count2);
 			scanf("%d", &vertexSpl);
 			if (vertexSpl < 1
-					|| vertexSpl > (count1 > count2 ? count1 : count2)) {
+				|| vertexSpl >(count1 > count2 ? count1 : count2)) {
 				printf("Vvedite eshche raz");
 				break;
 			}
@@ -407,8 +408,8 @@ int main() {
 		case 4:
 			printf("\nMatrix Union yes? 1=yes: ");
 			int sizenew = 0;
-			int **matrixnew = unione(matrix1, matrix2, count1, count2,
-					&sizenew);
+			int** matrixnew = unione(matrix1, matrix2, count1, count2,
+				&sizenew);
 			printf("union ok\n----\n");
 			for (int i = 0; i < sizenew; i++) {
 				for (int j = 0; j < sizenew; j++) {
@@ -420,9 +421,9 @@ int main() {
 			break;
 		case 5:
 			printf("\nMatrix intersection yes? yes: ");
-			int sizenew = 0;
-			int **matrixnew = intersection(matrix1, matrix2, count1, count2,
-					&sizenew);
+			sizenew = 0;
+			matrixnew = intersection(matrix1, matrix2, count1, count2,
+				&sizenew);
 			printf("intersection ok\n----\n");
 			for (int i = 0; i < sizenew; i++) {
 				for (int j = 0; j < sizenew; j++) {
@@ -439,4 +440,3 @@ int main() {
 	}
 
 }
-

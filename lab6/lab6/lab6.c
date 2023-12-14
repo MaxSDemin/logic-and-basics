@@ -63,6 +63,9 @@ void printGraph(struct Graph* graph) {
 }
 
 int** identity(int** matrix, int vertexA, int vertexB, int count) {
+	if (!matrix[vertexA][vertexB])
+		return matrix;
+
 	int** matrixNew = (int**)calloc(count - 1, sizeof(int*));
 	for (int i = 0; i < count - 1; i++) {
 		matrixNew[i] = (int*)calloc(count - 1, sizeof(int));
@@ -163,8 +166,12 @@ int** splitting(int** matrix, int vertex, int count) {
 		matrixNew[count - 1][x] = matrix[vertex][x];
 	}
 
-	matrixNew[count - 1][count - 1] = 0;
-	matrixNew[count - 2][count - 2] = 0;
+	if (matrixNew[0][0] && count == 2)
+		matrixNew[1][1] = 1;
+	else {
+		matrixNew[count - 1][count - 1] = 0;
+		matrixNew[count - 2][count - 2] = 0;
+	}
 
 	return matrixNew;
 }
@@ -304,14 +311,14 @@ int main() {
 	while (ready) {
 
 		fseek(stdin, 0, SEEK_END);
-		/*printGraph(graph1);
-		 printf("\n");
+		/*printGraph(graph1);                                                    
+		 printf("\n")
 		 printGraph(graph2);*/
 		printf("\n\n");
 
 		for (int i = 0; i < count1; i++) {
 			for (int j = 0; j < count1; j++) {
-				printf("%d ", matrix1[i][j]);
+				printf("%d ", matrix1[i][j]);                                                                                             /*52*/
 			}
 			printf("\n");
 		}
@@ -348,14 +355,18 @@ int main() {
 			vertexB--;
 
 			new_ = identity(matrix1, vertexA, vertexB, count1);
-			free(matrix1);
-			matrix1 = new_;
-			count1--;
+			if (new_ != matrix1) {
+				free(matrix1);
+				matrix1 = new_;
+				count1--;
+			}
 
 			new_ = identity(matrix2, vertexA, vertexB, count2);
-			free(matrix2);
-			matrix2 = new_;
-			count2--;
+			if (new_ != matrix2) {
+				free(matrix2);
+				matrix2 = new_;
+				count2--;
+			}
 
 			break;
 		case 2:
@@ -373,14 +384,18 @@ int main() {
 			vertexB--;
 
 			new_ = tightening(matrix1, vertexA, vertexB, count1);
-			free(matrix1);
-			matrix1 = new_;
-			count1--;
+			if (new_ != matrix1) {
+				free(matrix1);
+				count1--;
+				matrix1 = new_;
+			}
 
 			new_ = tightening(matrix2, vertexA, vertexB, count2);
-			free(matrix2);
-			matrix2 = new_;
-			count2--;
+			if (new_ != matrix2) {
+				free(matrix2);
+				count2--;
+				matrix2 = new_;
+			}
 
 			break;
 		case 3:
@@ -396,14 +411,18 @@ int main() {
 			vertexSpl--;
 
 			new_ = splitting(matrix1, vertexSpl, count1);
-			free(matrix1);
-			matrix1 = new_;
-			count1++;
+			if (new_ != matrix1) {
+				free(matrix1);
+				matrix1 = new_;
+				count1++;
+			}
 
 			new_ = splitting(matrix2, vertexSpl, count2);
-			free(matrix2);
-			matrix2 = new_;
-			count2++;
+			if (new_ != matrix2) {
+				free(matrix2);
+				matrix2 = new_;
+				count2++;
+			}
 
 			break;
 		case 4:

@@ -335,7 +335,7 @@ int main() {
 			ready = false;
 			break;
 		case 1:
-			int maxx = count1 > count2 ? count1 : count2;
+			int maxx = count1 < count2 ? count1 : count2;
 			printf("\nVvedite nuzhnye vershiny [1-%d] [1-%d]: ", maxx, maxx);
 			scanf("%d %d", &vertexA, &vertexB);
 			if (vertexA < 1 || vertexB < 1 || vertexA > maxx
@@ -358,7 +358,7 @@ int main() {
 
 			break;
 		case 2:
-			maxx = count1 > count2 ? count1 : count2;
+			maxx = count1 < count2 ? count1 : count2;
 			printf(
 				"\nVvedite vershiny mezhdu kotorymi styanut' rebro [1-%d] [1-%d]: ",
 				maxx, maxx);

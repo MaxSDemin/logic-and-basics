@@ -8,11 +8,11 @@
 
 typedef struct node {
 	int vertex;
-	struct node* next;
+	struct node *next;
 } node;
 
 struct node* createNode(int v) {
-	struct node* newNode = (node*)malloc(sizeof(struct node));
+	struct node *newNode = (node*) malloc(sizeof(struct node));
 	newNode->vertex = v;
 	newNode->next = NULL;
 	return newNode;
@@ -20,14 +20,14 @@ struct node* createNode(int v) {
 
 typedef struct Graph {
 	int numVertices;
-	struct node** adjLists;
+	struct node **adjLists;
 } Graph;
 
 struct Graph* createGraph(int vertices) {
-	struct Graph* graph = (Graph*)malloc(sizeof(struct Graph));
+	struct Graph *graph = (Graph*) malloc(sizeof(struct Graph));
 	graph->numVertices = vertices;
 
-	graph->adjLists = (node**)malloc(vertices * sizeof(struct node*));
+	graph->adjLists = (node**) malloc(vertices * sizeof(struct node*));
 
 	int i;
 	for (i = 0; i < vertices; i++)
@@ -36,8 +36,8 @@ struct Graph* createGraph(int vertices) {
 	return graph;
 }
 
-void addEdge(struct Graph* graph, int src, int dest) {
-	struct node* newNode = createNode(dest);
+void addEdge(struct Graph *graph, int src, int dest) {
+	struct node *newNode = createNode(dest);
 	newNode->next = graph->adjLists[src];
 	graph->adjLists[src] = newNode;
 
@@ -46,14 +46,14 @@ void addEdge(struct Graph* graph, int src, int dest) {
 	graph->adjLists[dest] = newNode;
 }
 
-void printGraph(struct Graph* graph) {
+void printGraph(struct Graph *graph) {
 #ifdef NO_PRINT
 	return;
 #endif
 
 	int v;
 	for (v = 0; v < graph->numVertices; v++) {
-		struct node* temp = graph->adjLists[v];
+		struct node *temp = graph->adjLists[v];
 		printf("\nvertex: %d\n ", v + 1);
 		while (temp) {
 			printf("%d ", temp->vertex + 1);
@@ -62,13 +62,15 @@ void printGraph(struct Graph* graph) {
 	}
 }
 
-int** identity(int** matrix, int vertexA, int vertexB, int count) {
-	if (!matrix[vertexA][vertexB])
+int** identity(int **matrix, int vertexA, int vertexB, int count) {
+	if (!matrix[vertexA][vertexB]) {
+		printf("deistviye propuscheno\n");
 		return matrix;
+	}
 
-	int** matrixNew = (int**)calloc(count - 1, sizeof(int*));
+	int **matrixNew = (int**) calloc(count - 1, sizeof(int*));
 	for (int i = 0; i < count - 1; i++) {
-		matrixNew[i] = (int*)calloc(count - 1, sizeof(int));
+		matrixNew[i] = (int*) calloc(count - 1, sizeof(int));
 	}
 	int row = 0;
 	int col = 0;
@@ -90,14 +92,11 @@ int** identity(int** matrix, int vertexA, int vertexB, int count) {
 
 	for (int i = 0; i < count; i++) {
 		if (i != vertexA && i != vertexB) {
-			matrixNew[row][count - 2] = matrix[vertexA][i]
-				|| matrix[vertexB][i];
-			matrixNew[count - 2][col] = matrix[i][vertexA]
-				|| matrix[i][vertexB];
+			matrixNew[row][count - 2] = matrix[vertexA][i] || matrix[vertexB][i];
+			matrixNew[count - 2][col] = matrix[i][vertexA] || matrix[i][vertexB];
 			row++;
 			col++;
-		}
-		else {
+		} else {
 			matrixNew[count - 2][count - 2] = matrix[vertexA][vertexB];
 		}
 	}
@@ -115,7 +114,7 @@ int** identity(int** matrix, int vertexA, int vertexB, int count) {
 	return matrixNew;
 }
 
-int** tightening(int** matrix, int vertexA, int vertexB, int count) {
+int** tightening(int **matrix, int vertexA, int vertexB, int count) {
 	matrix[vertexA][vertexB] = 0;
 	matrix[vertexB][vertexA] = 0;
 	matrix = identity(matrix, vertexA, vertexB, count);
@@ -123,44 +122,44 @@ int** tightening(int** matrix, int vertexA, int vertexB, int count) {
 	return matrix;
 }
 
-int** splitting(int** matrix, int vertex, int count) {
+int** splitting(int **matrix, int vertex, int count) {
 	count++;
-	int** matrixNew = (int**)calloc(count, sizeof(int*));
+	int **matrixNew = (int**) calloc(count, sizeof(int*));
 	for (int i = 0; i < count; i++)
-		matrixNew[i] = (int*)calloc(count, sizeof(int));
+		matrixNew[i] = (int*) calloc(count, sizeof(int));
 
-	// ñêîïèðîâàòü âåðõíèé ëåâûé óãîë äî ðàñùåïëåííîé ÷àñòè
+	// ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð²ÐµÑ€Ñ…Ð½Ð¸Ð¹ Ð»ÐµÐ²Ñ‹Ð¹ ÑƒÐ³Ð¾Ð» Ð´Ð¾ Ñ€Ð°ÑÑ‰ÐµÐ¿Ð»ÐµÐ½Ð½Ð¾Ð¹ Ñ‡Ð°ÑÑ‚Ð¸
 	for (int y = 0; y < vertex; y++)
 		for (int x = 0; x < vertex; x++)
 			matrixNew[y][x] = matrix[y][x];
 
-	// ñêîïèðîâàòü âåðõíèé ïðàâûé óãîë ïîñëå ðàñùåïëåííîé ÷àñòè
+	// ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð²ÐµÑ€Ñ…Ð½Ð¸Ð¹ Ð¿Ñ€Ð°Ð²Ñ‹Ð¹ ÑƒÐ³Ð¾Ð» Ð¿Ð¾ÑÐ»Ðµ Ñ€Ð°ÑÑ‰ÐµÐ¿Ð»ÐµÐ½Ð½Ð¾Ð¹ Ñ‡Ð°ÑÑ‚Ð¸
 	for (int y = 0; y < vertex; y++)
-		for (int x = vertex + 1; x < count - 1; x++) // ïðîïóñêàÿ ýòó ÷àñòü + ñòàðàÿ ìàòðèöà ìåíüøå
-			matrixNew[y][x - 1] = matrix[y][x]; // ñìåùåíèå ÷òîá íå áûëî ïðîáåëà
+		for (int x = vertex + 1; x < count - 1; x++) // Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°Ñ ÑÑ‚Ñƒ Ñ‡Ð°ÑÑ‚ÑŒ + ÑÑ‚Ð°Ñ€Ð°Ñ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ð° Ð¼ÐµÐ½ÑŒÑˆÐµ
+			matrixNew[y][x - 1] = matrix[y][x]; // ÑÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ Ñ‡Ñ‚Ð¾Ð± Ð½Ðµ Ð±Ñ‹Ð»Ð¾ Ð¿Ñ€Ð¾Ð±ÐµÐ»Ð°
 
-	// ñêîïèðîâàòü íèæíèé ëåâûé óãîë ïîñëå ðàñùåïëåííîé ÷àñòè
-	for (int y = vertex + 1; y < count - 1; y++) // ïðîïóñêàÿ ýòó ÷àñòü + ñòàðàÿ ìàòðèöà ìåíüøå
+		// ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð½Ð¸Ð¶Ð½Ð¸Ð¹ Ð»ÐµÐ²Ñ‹Ð¹ ÑƒÐ³Ð¾Ð» Ð¿Ð¾ÑÐ»Ðµ Ñ€Ð°ÑÑ‰ÐµÐ¿Ð»ÐµÐ½Ð½Ð¾Ð¹ Ñ‡Ð°ÑÑ‚Ð¸
+	for (int y = vertex + 1; y < count - 1; y++) // Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°Ñ ÑÑ‚Ñƒ Ñ‡Ð°ÑÑ‚ÑŒ + ÑÑ‚Ð°Ñ€Ð°Ñ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ð° Ð¼ÐµÐ½ÑŒÑˆÐµ
 		for (int x = 0; x < vertex; x++)
-			matrixNew[y - 1][x] = matrix[y][x]; // ñìåùåíèå ÷òîá íå áûëî ïðîáåëà
+			matrixNew[y - 1][x] = matrix[y][x]; // ÑÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ Ñ‡Ñ‚Ð¾Ð± Ð½Ðµ Ð±Ñ‹Ð»Ð¾ Ð¿Ñ€Ð¾Ð±ÐµÐ»Ð°
 
-	// ñêîïèðîâàòü íèæíèé ïðàâûé óãîë ïîñëå ðàñùåïëåííîé ÷àñòè
-	for (int y = vertex + 1; y < count - 1; y++) // ïðîïóñêàÿ ýòó ÷àñòü + ñòàðàÿ ìàòðèöà ìåíüøå
-		for (int x = vertex + 1; x < count - 1; x++) // ïðîïóñêàÿ ýòó ÷àñòü + ñòàðàÿ ìàòðèöà ìåíüøå
-			matrixNew[y - 1][x - 1] = matrix[y][x]; // ñìåùåíèå ÷òîá íå áûëî ïðîáåëà
+		// ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð½Ð¸Ð¶Ð½Ð¸Ð¹ Ð¿Ñ€Ð°Ð²Ñ‹Ð¹ ÑƒÐ³Ð¾Ð» Ð¿Ð¾ÑÐ»Ðµ Ñ€Ð°ÑÑ‰ÐµÐ¿Ð»ÐµÐ½Ð½Ð¾Ð¹ Ñ‡Ð°ÑÑ‚Ð¸
+	for (int y = vertex + 1; y < count - 1; y++) // Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°Ñ ÑÑ‚Ñƒ Ñ‡Ð°ÑÑ‚ÑŒ + ÑÑ‚Ð°Ñ€Ð°Ñ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ð° Ð¼ÐµÐ½ÑŒÑˆÐµ
+		for (int x = vertex + 1; x < count - 1; x++) // Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°Ñ ÑÑ‚Ñƒ Ñ‡Ð°ÑÑ‚ÑŒ + ÑÑ‚Ð°Ñ€Ð°Ñ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ð° Ð¼ÐµÐ½ÑŒÑˆÐµ
+			matrixNew[y - 1][x - 1] = matrix[y][x]; // ÑÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ Ñ‡Ñ‚Ð¾Ð± Ð½Ðµ Ð±Ñ‹Ð»Ð¾ Ð¿Ñ€Ð¾Ð±ÐµÐ»Ð°
 
-	// ñêîïèðîâàòü íèæíèé ïðàâûé óãîë ïîñëå ðàñùåïëåííîé ÷àñòè
-	for (int y = vertex + 1; y < count - 1; y++) // ïðîïóñêàÿ ýòó ÷àñòü + ñòàðàÿ ìàòðèöà ìåíüøå
-		for (int x = vertex + 1; x < count - 1; x++) // ïðîïóñêàÿ ýòó ÷àñòü + ñòàðàÿ ìàòðèöà ìåíüøå
-			matrixNew[y - 1][x - 1] = matrix[y][x]; // ñìåùåíèå ÷òîá íå áûëî ïðîáåëà
+		// ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð½Ð¸Ð¶Ð½Ð¸Ð¹ Ð¿Ñ€Ð°Ð²Ñ‹Ð¹ ÑƒÐ³Ð¾Ð» Ð¿Ð¾ÑÐ»Ðµ Ñ€Ð°ÑÑ‰ÐµÐ¿Ð»ÐµÐ½Ð½Ð¾Ð¹ Ñ‡Ð°ÑÑ‚Ð¸
+	for (int y = vertex + 1; y < count - 1; y++) // Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°Ñ ÑÑ‚Ñƒ Ñ‡Ð°ÑÑ‚ÑŒ + ÑÑ‚Ð°Ñ€Ð°Ñ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ð° Ð¼ÐµÐ½ÑŒÑˆÐµ
+		for (int x = vertex + 1; x < count - 1; x++) // Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°Ñ ÑÑ‚Ñƒ Ñ‡Ð°ÑÑ‚ÑŒ + ÑÑ‚Ð°Ñ€Ð°Ñ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ð° Ð¼ÐµÐ½ÑŒÑˆÐµ
+			matrixNew[y - 1][x - 1] = matrix[y][x]; // ÑÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ Ñ‡Ñ‚Ð¾Ð± Ð½Ðµ Ð±Ñ‹Ð»Ð¾ Ð¿Ñ€Ð¾Ð±ÐµÐ»Ð°
 
-	// ñêîïèðîâàòü âåðòèêàëüíóþ ÷àñòü â ïîñëåäíèå äâà ñòîëáöà
+		// ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð²ÐµÑ€Ñ‚Ð¸ÐºÐ°Ð»ÑŒÐ½ÑƒÑŽ Ñ‡Ð°ÑÑ‚ÑŒ Ð² Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ðµ Ð´Ð²Ð° ÑÑ‚Ð¾Ð»Ð±Ñ†Ð°
 	for (int y = 0; y < count - 1; y++) {
 		matrixNew[y][count - 1] = matrix[y][vertex];
 		matrixNew[y][count - 2] = matrix[y][vertex];
 	}
 
-	// ñêîïèðîâàòü ãîðèçîíòàëüíóþ ÷àñòü â ïîñëåäíèå äâå ñòðîêè
+	// ÑÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð³Ð¾Ñ€Ð¸Ð·Ð¾Ð½Ñ‚Ð°Ð»ÑŒÐ½ÑƒÑŽ Ñ‡Ð°ÑÑ‚ÑŒ Ð² Ð¿Ð¾ÑÐ»ÐµÐ´Ð½Ð¸Ðµ Ð´Ð²Ðµ ÑÑ‚Ñ€Ð¾ÐºÐ¸
 	for (int x = 0; x < count - 1; x++) {
 		matrixNew[count - 1][x] = matrix[vertex][x];
 		matrixNew[count - 1][x] = matrix[vertex][x];
@@ -176,16 +175,16 @@ int** splitting(int** matrix, int vertex, int count) {
 	return matrixNew;
 }
 
-int** unione(int** matrix1, int** matrix2, int size1, int size2, int* sizeNew) {
+int** unione(int **matrix1, int **matrix2, int size1, int size2, int *sizeNew) {
 	int maxx = size1 > size2 ? size1 : size2;
 	int minn = maxx == size2 ? size1 : size2;
 
 	*sizeNew = maxx;
 	bool m1smol = minn == size1;
 
-	int** matrixNew = (int**)calloc(maxx, sizeof(int*));
+	int **matrixNew = (int**) calloc(maxx, sizeof(int*));
 	for (int i = 0; i < maxx; i++)
-		matrixNew[i] = (int*)calloc(maxx, sizeof(int));
+		matrixNew[i] = (int*) calloc(maxx, sizeof(int));
 
 	for (int i = 0; i < maxx; i++)
 		for (int i2 = 0; i2 < maxx; i2++)
@@ -197,22 +196,25 @@ int** unione(int** matrix1, int** matrix2, int size1, int size2, int* sizeNew) {
 	return matrixNew;
 }
 
-int** intersection(int** matrix1, int** matrix2, int size1, int size2,
-	int* sizeNew) {
+int** intersection(int **matrix1, int **matrix2, int size1, int size2, int *sizeNew) {
 	int maxx = size1 > size2 ? size1 : size2;
 	int minn = maxx == size2 ? size1 : size2;
 
 	*sizeNew = maxx;
 
-	int** matrixNew = (int**)calloc(maxx, sizeof(int*));
+	int **matrixNew = (int**) calloc(maxx, sizeof(int*));
 	for (int i = 0; i < maxx; i++)
-		matrixNew[i] = (int*)calloc(maxx, sizeof(int));
+		matrixNew[i] = (int*) calloc(maxx, sizeof(int));
 
 	for (int i = 0; i < minn; i++)
 		for (int i2 = 0; i2 < minn; i2++)
 			matrixNew[i][i2] = matrix1[i][i2] * matrix2[i][i2] > 0;
 
 	return matrixNew;
+}
+
+void cleanstdin() {
+	fseek(stdin, 0, SEEK_END);
 }
 
 int main() {
@@ -222,22 +224,28 @@ int main() {
 	setbuf(stdout, NULL);
 
 	int count1 = 0;
-	printf("Vvedite razmer pervogo grafa:");
-	scanf("%d", &count1);
+	while (count1 < 1 || count1 > 5000) {
+		printf("Vvedite razmer pervogo grafa:");
+		cleanstdin();
+		scanf("%d", &count1);
+	}
 
 	int count2 = 0;
-	printf("Vvedite razmer vtorogo grafa: ");
-	scanf("%d", &count2);
+	while (count2 < 1 || count2 > 5000) {
+		printf("Vvedite razmer vtorogo grafa: ");
+		cleanstdin();
+		scanf("%d", &count2);
+	}
 
 	srand(time(NULL));
 
-	int** matrix1 = (int**)malloc(count1 * sizeof(int*));
+	int **matrix1 = (int**) malloc(count1 * sizeof(int*));
 	for (int i = 0; i < count1; i++) {
-		matrix1[i] = (int*)malloc(count1 * sizeof(int));
+		matrix1[i] = (int*) malloc(count1 * sizeof(int));
 	}
-	int** matrix2 = (int**)malloc(count2 * sizeof(int*));
+	int **matrix2 = (int**) malloc(count2 * sizeof(int*));
 	for (int i = 0; i < count2; i++) {
-		matrix2[i] = (int*)malloc(count2 * sizeof(int));
+		matrix2[i] = (int*) malloc(count2 * sizeof(int));
 	}
 
 	for (int i = 0; i < count1; i++) {
@@ -253,22 +261,22 @@ int main() {
 
 	for (int i = 0; i < count1; i++) {
 		for (int j = i + 1; j < count1; j++) {
-			int random = rand() % 2; // Ãåíåðàöèÿ ñëó÷àéíîãî ÷èñëà 0 èëè 1
+			int random = rand() % 2; // Ð“ÐµÐ½ÐµÑ€Ð°Ñ†Ð¸Ñ ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ð¾Ð³Ð¾ Ñ‡Ð¸ÑÐ»Ð° 0 Ð¸Ð»Ð¸ 1
 			matrix1[i][j] = random;
-			matrix1[j][i] = random; // Çàïîëíåíèå ýëåìåíòîâ è èõ ñèììåòðè÷íûõ ïàð
+			matrix1[j][i] = random; // Ð—Ð°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² Ð¸ Ð¸Ñ… ÑÐ¸Ð¼Ð¼ÐµÑ‚Ñ€Ð¸Ñ‡Ð½Ñ‹Ñ… Ð¿Ð°Ñ€
 		}
 	}
 	for (int i = 0; i < count2; i++) {
 		for (int j = i + 1; j < count2; j++) {
-			int random = rand() % 2; // Ãåíåðàöèÿ ñëó÷àéíîãî ÷èñëà 0 èëè 1
+			int random = rand() % 2; // Ð“ÐµÐ½ÐµÑ€Ð°Ñ†Ð¸Ñ ÑÐ»ÑƒÑ‡Ð°Ð¹Ð½Ð¾Ð³Ð¾ Ñ‡Ð¸ÑÐ»Ð° 0 Ð¸Ð»Ð¸ 1
 			matrix2[i][j] = random;
-			matrix2[j][i] = random; // Çàïîëíåíèå ýëåìåíòîâ è èõ ñèììåòðè÷íûõ ïàð
+			matrix2[j][i] = random; // Ð—Ð°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² Ð¸ Ð¸Ñ… ÑÐ¸Ð¼Ð¼ÐµÑ‚Ñ€Ð¸Ñ‡Ð½Ñ‹Ñ… Ð¿Ð°Ñ€
 		}
 	}
 
-	struct Graph* graph1 = createGraph(count1);
+	struct Graph *graph1 = createGraph(count1);
 	srand(time(NULL));
-	int* vertex = (int*)calloc(count1, sizeof(int));
+	int *vertex = (int*) calloc(count1, sizeof(int));
 	bool edge;
 
 	for (int i = 0; i < count1; i++) {
@@ -284,9 +292,9 @@ int main() {
 		}
 	}
 
-	struct Graph* graph2 = createGraph(count2);
+	struct Graph *graph2 = createGraph(count2);
 	srand(time(NULL));
-	vertex = (int*)calloc(count2, sizeof(int));
+	vertex = (int*) calloc(count2, sizeof(int));
 
 	for (int i = 0; i < count2; i++) {
 		vertex[i] = i;
@@ -303,22 +311,22 @@ int main() {
 
 	printf("\n");
 
-	//Çàäàíèå 2.1
+	//Ð—Ð°Ð´Ð°Ð½Ð¸Ðµ 2.1
 	int vertexA, vertexB, vertexSpl;
 
 	bool ready = true;
 
 	while (ready) {
 
-		fseek(stdin, 0, SEEK_END);
-		/*printGraph(graph1);                                                    
+		cleanstdin();
+		/*printGraph(graph1);
 		 printf("\n")
 		 printGraph(graph2);*/
 		printf("\n\n");
 
 		for (int i = 0; i < count1; i++) {
 			for (int j = 0; j < count1; j++) {
-				printf("%d ", matrix1[i][j]);                                                                                             /*52*/
+				printf("%d ", matrix1[i][j]); /*52*/
 			}
 			printf("\n");
 		}
@@ -332,131 +340,132 @@ int main() {
 
 		printf("\nVyberete kakuyu operaciyu nuzhno sdelat':\n");
 		printf(
-			"0. Propustit'/Prodolzhit' dal'she.\n1. Otozhdestvlenie vershin.\n2. Styagivanie rebra.\n3. Rasshcheplenie vershin.\n4. Objedineniya grafof.\n5. Peresecheniya grafof.\n\n");
+				"0. Vyhod.\n1. Otozhdestvlenie vershin.\n2. Styagivanie rebra.\n3. Rasshcheplenie vershin.\n4. Objedineniya grafof.\n5. Peresecheniya grafof.\n\n");
 		printf("\nDlya vybora vvedite cifru ot 1 do 5 sootvetstvenno\n");
 
 		int input;
+		cleanstdin();
 		scanf("%d", &input);
-		int** new_ = NULL;
+		int **new_ = NULL;
+		int maxx = 0;
+		int **matrixnew = NULL;
+		int sizenew = 0;
+
 		switch (input) {
-		case 0:
-			ready = false;
-			break;
-		case 1:
-			int maxx = count1 < count2 ? count1 : count2;
-			printf("\nVvedite nuzhnye vershiny [1-%d] [1-%d]: ", maxx, maxx);
-			scanf("%d %d", &vertexA, &vertexB);
-			if (vertexA < 1 || vertexB < 1 || vertexA > maxx
-				|| vertexB > maxx) {
-				printf("Vvedite eshche raz");
+			case 0:
+				ready = false;
 				break;
-			}
-			vertexA--;
-			vertexB--;
-
-			new_ = identity(matrix1, vertexA, vertexB, count1);
-			if (new_ != matrix1) {
-				free(matrix1);
-				matrix1 = new_;
-				count1--;
-			}
-
-			new_ = identity(matrix2, vertexA, vertexB, count2);
-			if (new_ != matrix2) {
-				free(matrix2);
-				matrix2 = new_;
-				count2--;
-			}
-
-			break;
-		case 2:
-			maxx = count1 < count2 ? count1 : count2;
-			printf(
-				"\nVvedite vershiny mezhdu kotorymi styanut' rebro [1-%d] [1-%d]: ",
-				maxx, maxx);
-			scanf("%d %d", &vertexA, &vertexB);
-			if (vertexA < 1 || vertexB < 1 || vertexA > maxx
-				|| vertexB > maxx) {
-				printf("Vvedite eshche raz");
-				break;
-			}
-			vertexA--;
-			vertexB--;
-
-			new_ = tightening(matrix1, vertexA, vertexB, count1);
-			if (new_ != matrix1) {
-				free(matrix1);
-				count1--;
-				matrix1 = new_;
-			}
-
-			new_ = tightening(matrix2, vertexA, vertexB, count2);
-			if (new_ != matrix2) {
-				free(matrix2);
-				count2--;
-				matrix2 = new_;
-			}
-
-			break;
-		case 3:
-			printf("\nVvedite vershine kotoruyu hotite rasshchepit' [1-%d]: ",
-				count1 < count2 ? count1 : count2);
-			scanf("%d", &vertexSpl);
-			if (vertexSpl < 1
-				|| vertexSpl >(count1 > count2 ? count1 : count2)) {
-				printf("Vvedite eshche raz");
-				break;
-			}
-
-			vertexSpl--;
-
-			new_ = splitting(matrix1, vertexSpl, count1);
-			if (new_ != matrix1) {
-				free(matrix1);
-				matrix1 = new_;
-				count1++;
-			}
-
-			new_ = splitting(matrix2, vertexSpl, count2);
-			if (new_ != matrix2) {
-				free(matrix2);
-				matrix2 = new_;
-				count2++;
-			}
-
-			break;
-		case 4:
-			printf("\nMatrix Union yes? 1=yes: ");
-			int sizenew = 0;
-			int** matrixnew = unione(matrix1, matrix2, count1, count2,
-				&sizenew);
-			printf("union ok\n----\n");
-			for (int i = 0; i < sizenew; i++) {
-				for (int j = 0; j < sizenew; j++) {
-					printf("%d ", matrixnew[i][j]);
+			case 1:
+				maxx = count1 < count2 ? count1 : count2;
+				printf("\nVvedite nuzhnye vershiny [1-%d] [1-%d]: ", maxx, maxx);
+				cleanstdin();
+				scanf("%d %d", &vertexA, &vertexB);
+				if (vertexA < 1 || vertexB < 1 || vertexA > maxx || vertexB > maxx) {
+					printf("Vvedite eshche raz");
+					break;
 				}
-				printf("\n");
-			}
-			printf("-----");
-			break;
-		case 5:
-			printf("\nMatrix intersection yes? yes: ");
-			sizenew = 0;
-			matrixnew = intersection(matrix1, matrix2, count1, count2,
-				&sizenew);
-			printf("intersection ok\n----\n");
-			for (int i = 0; i < sizenew; i++) {
-				for (int j = 0; j < sizenew; j++) {
-					printf("%d ", matrixnew[i][j]);
+				vertexA--;
+				vertexB--;
+
+				new_ = identity(matrix1, vertexA, vertexB, count1);
+				if (new_ != matrix1) {
+					free(matrix1);
+					matrix1 = new_;
+					count1--;
 				}
-				printf("\n");
-			}
-			printf("-----");
-			break;
-		default:
-			printf("Vvedite eshche raz");
-			break;
+
+				new_ = identity(matrix2, vertexA, vertexB, count2);
+				if (new_ != matrix2) {
+					free(matrix2);
+					matrix2 = new_;
+					count2--;
+				}
+
+				break;
+			case 2:
+				maxx = count1 < count2 ? count1 : count2;
+				printf("\nVvedite vershiny mezhdu kotorymi styanut' rebro [1-%d] [1-%d]: ", maxx, maxx);
+				cleanstdin();
+				scanf("%d %d", &vertexA, &vertexB);
+				if (vertexA < 1 || vertexB < 1 || vertexA > maxx || vertexB > maxx) {
+					printf("Vvedite eshche raz");
+					break;
+				}
+				vertexA--;
+				vertexB--;
+
+				new_ = tightening(matrix1, vertexA, vertexB, count1);
+				if (new_ != matrix1) {
+					free(matrix1);
+					count1--;
+					matrix1 = new_;
+				}
+
+				new_ = tightening(matrix2, vertexA, vertexB, count2);
+				if (new_ != matrix2) {
+					free(matrix2);
+					count2--;
+					matrix2 = new_;
+				}
+
+				break;
+			case 3:
+				printf("\nVvedite vershine kotoruyu hotite rasshchepit' [1-%d]: ", count1 < count2 ? count1 : count2);
+				cleanstdin();
+				scanf("%d", &vertexSpl);
+				if (vertexSpl < 1 || vertexSpl > (count1 > count2 ? count1 : count2)) {
+					printf("Vvedite eshche raz");
+					break;
+				}
+
+				vertexSpl--;
+
+				new_ = splitting(matrix1, vertexSpl, count1);
+				if (new_ != matrix1) {
+					free(matrix1);
+					matrix1 = new_;
+					count1++;
+				}
+
+				new_ = splitting(matrix2, vertexSpl, count2);
+				if (new_ != matrix2) {
+					free(matrix2);
+					matrix2 = new_;
+					count2++;
+				}
+
+				break;
+			case 4:
+				printf("\nMatrix Union: ");
+				sizenew = 0;
+				matrixnew = unione(matrix1, matrix2, count1, count2, &sizenew);
+				printf("union ok\n----\n");
+				for (int i = 0; i < sizenew; i++) {
+					for (int j = 0; j < sizenew; j++) {
+						printf("%d ", matrixnew[i][j]);
+					}
+					printf("\n");
+				}
+				printf("-----");
+				break;
+			case 5:
+				printf("\nMatrix intersection: ");
+				sizenew = 0;
+				matrixnew = intersection(matrix1, matrix2, count1, count2, &sizenew);
+				printf("intersection ok\n----\n");
+				for (int i = 0; i < sizenew; i++) {
+					for (int j = 0; j < sizenew; j++) {
+						printf("%d ", matrixnew[i][j]);
+					}
+					printf("\n");
+				}
+				printf("-----");
+				break;
+			default:
+				printf("Vvedite eshche raz");
+				break;
 		}
+		cleanstdin();
 	}
 
 }
